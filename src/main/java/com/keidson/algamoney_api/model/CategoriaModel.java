@@ -15,10 +15,10 @@ public class CategoriaModel {
   private Long codigo;
   private String nome;
 
-  public Long getId() {
+  public Long getCodigo() {
     return codigo;
   }
-  public void setId(Long codigo) {
+  public void setCodigo(Long codigo) {
     this.codigo = codigo;
   }
   public String getNome() {

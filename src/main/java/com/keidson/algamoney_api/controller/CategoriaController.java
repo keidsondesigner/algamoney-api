@@ -1,20 +1,21 @@
 package com.keidson.algamoney_api.controller;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.keidson.algamoney_api.model.CategoriaModel;
 import com.keidson.algamoney_api.repository.CategoriaRepository;
 
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.net.URI;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
-
-
 
 @RestController
 @RequestMapping("/categorias")
@@ -32,8 +33,13 @@ public class CategoriaController {
   }
 
   @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public void criar(@RequestBody CategoriaModel categoriaModel) {
-    this.categoriaRepository.save(categoriaModel);
+  public ResponseEntity<CategoriaModel> criar(@RequestBody CategoriaModel categoriaModel, HttpServletResponse response) {
+    CategoriaModel categoriaSalva = this.categoriaRepository.save(categoriaModel);
+
+    URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
+        .buildAndExpand(categoriaSalva.getCodigo()).toUri();
+
+    response.setHeader("Location", uri.toASCIIString());
+    return ResponseEntity.created(uri).body(categoriaSalva);
   }
 }
