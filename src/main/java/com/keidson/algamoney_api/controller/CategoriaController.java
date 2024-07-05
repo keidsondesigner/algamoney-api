@@ -1,17 +1,18 @@
 package com.keidson.algamoney_api.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.keidson.algamoney_api.event.RecursoCriadoEvent;
 import com.keidson.algamoney_api.model.CategoriaModel;
 import com.keidson.algamoney_api.repository.CategoriaRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,10 +25,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-  private CategoriaRepository categoriaRepository;
+  private final CategoriaRepository categoriaRepository;
+  private final ApplicationEventPublisher publisher; //Publicador de eventos RecursoCriadoEvent()
 
-  public CategoriaController(CategoriaRepository categoriaRepository) {
+  public CategoriaController(CategoriaRepository categoriaRepository, ApplicationEventPublisher publisher) {
     this.categoriaRepository = categoriaRepository;
+    this.publisher = publisher;
   }
   
   @GetMapping
@@ -39,11 +42,9 @@ public class CategoriaController {
   public ResponseEntity<CategoriaModel> criar(@Valid @RequestBody CategoriaModel categoriaModel, HttpServletResponse response) {
     CategoriaModel categoriaSalva = this.categoriaRepository.save(categoriaModel);
 
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
-        .buildAndExpand(categoriaSalva.getCodigo()).toUri();
+    publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getCodigo()));
 
-    response.setHeader("Location", uri.toASCIIString());
-    return ResponseEntity.created(uri).body(categoriaSalva);
+    return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
   }
 
   @GetMapping("/{codigo}")
