@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/categorias")
@@ -35,7 +36,7 @@ public class CategoriaController {
   }
 
   @PostMapping
-  public ResponseEntity<CategoriaModel> criar(@RequestBody CategoriaModel categoriaModel, HttpServletResponse response) {
+  public ResponseEntity<CategoriaModel> criar(@Valid @RequestBody CategoriaModel categoriaModel, HttpServletResponse response) {
     CategoriaModel categoriaSalva = this.categoriaRepository.save(categoriaModel);
 
     URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{codigo}")
