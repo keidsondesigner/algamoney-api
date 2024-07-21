@@ -3,6 +3,7 @@ package com.keidson.algamoney_api.controller;
 import java.util.Optional;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,7 +39,6 @@ public class PessoaController {
 		PessoaModel pessoaSalva = pessoaRepository.save(pessoa);		
 
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
-
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
 	}
 
@@ -51,7 +51,8 @@ public class PessoaController {
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long codigo) {
-		this.pessoaRepository.deleteById(codigo);
+		PessoaModel pessoa = pessoaRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
+    pessoaRepository.deleteById(pessoa.getCodigo());
 	}
 
 }
