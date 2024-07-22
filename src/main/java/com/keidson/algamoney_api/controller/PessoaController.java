@@ -2,6 +2,7 @@ package com.keidson.algamoney_api.controller;
 
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.keidson.algamoney_api.event.RecursoCriadoEvent;
 import com.keidson.algamoney_api.model.PessoaModel;
 import com.keidson.algamoney_api.repository.PessoaRepository;
+import com.keidson.algamoney_api.service.PessoaService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/pessoas")
@@ -28,10 +32,17 @@ public class PessoaController {
 
 	private final PessoaRepository pessoaRepository;
 	private final ApplicationEventPublisher publisher; //Publicador de eventos RecursoCriadoEvent()
+	private final PessoaService pessoaService;
 
-	public PessoaController(PessoaRepository pessoaRepository, ApplicationEventPublisher publisher) {
+	public PessoaController(
+		PessoaRepository pessoaRepository, 
+		ApplicationEventPublisher publisher,
+		PessoaService pessoaService
+		
+	) {
     this.pessoaRepository = pessoaRepository;
     this.publisher = publisher;
+		this.pessoaService = pessoaService;
   }
 
   @PostMapping
@@ -53,6 +64,12 @@ public class PessoaController {
 	public void remover(@PathVariable Long codigo) {
 		PessoaModel pessoa = pessoaRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
     pessoaRepository.deleteById(pessoa.getCodigo());
+	}
+
+	@PutMapping("/{codigo}")
+	public ResponseEntity<PessoaModel> atualizar(@PathVariable Long codigo, @Valid @RequestBody PessoaModel pessoa) {
+		PessoaModel pessoaSalva = pessoaService.atualizar(codigo, pessoa);
+		return ResponseEntity.ok(pessoaSalva);
 	}
 
 }
