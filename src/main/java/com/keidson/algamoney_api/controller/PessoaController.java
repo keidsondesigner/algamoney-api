@@ -2,7 +2,6 @@ package com.keidson.algamoney_api.controller;
 
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -70,6 +69,12 @@ public class PessoaController {
 	public ResponseEntity<PessoaModel> atualizar(@PathVariable Long codigo, @Valid @RequestBody PessoaModel pessoa) {
 		PessoaModel pessoaSalva = pessoaService.atualizar(codigo, pessoa);
 		return ResponseEntity.ok(pessoaSalva);
+	}
+
+	@PutMapping("/{codigo}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void atualizaPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
+		pessoaService.atualizaPropriedadeAtivo(codigo, ativo);
 	}
 
 }
