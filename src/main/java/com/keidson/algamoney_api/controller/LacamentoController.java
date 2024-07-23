@@ -1,8 +1,11 @@
 package com.keidson.algamoney_api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +25,13 @@ public class LacamentoController {
   @GetMapping
   public List<LancamentoModel> listar() {
     return this.lancamentoRepository.findAll();
+  }
+
+  @GetMapping("/{codigo}")
+  public ResponseEntity<LancamentoModel> buscarPorCodigo(@PathVariable Long codigo) {
+    Optional<LancamentoModel> lancamento = this.lancamentoRepository.findById(codigo);
+    return lancamento.isPresent() ? 
+      ResponseEntity.ok(lancamento.get()) : ResponseEntity.notFound().build();
   }
 
 }
