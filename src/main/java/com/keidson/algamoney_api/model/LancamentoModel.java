@@ -23,31 +23,31 @@ public class LancamentoModel {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long codigo;
 
-  @NotNull
+  @NotNull(message = "O campo [descricão], é obrigatório.")
   private String descricao;
 
-  @NotNull
+  @NotNull(message = "O campo [dataVencimento], é obrigatório.")
   @Column(name = "data_vencimento")
   private LocalDate dataVencimento;
 
   @Column(name = "data_pagamento")
   private LocalDate dataPagamento;
 
-  @NotNull
+  @NotNull(message = "O campo [valor], é obrigatório.")
   private BigDecimal valor;
 
   private String observacao;
 
-  @NotNull
+  @NotNull(message = "O campo [tipo], é obrigatório.")
   @Enumerated(EnumType.STRING)
   private TipoLancamento tipo; // "TipoLancamento" é um enum criado;
 
-  @NotNull
+  @NotNull(message = "O campo [categoria], é obrigatório.")
   @ManyToOne
   @JoinColumn(name = "codigo_categoria")
   private CategoriaModel categoria; // Relacionamento: vários Lançamento tem 1 Categoria
 
-  @NotNull
+  @NotNull(message = "O campo [pessoa], é obrigatório.")
   @ManyToOne
   @JoinColumn(name = "codigo_pessoa")
   private PessoaModel pessoa; // Relacionamento: vários Lançamento tem 1 Pesssoa
