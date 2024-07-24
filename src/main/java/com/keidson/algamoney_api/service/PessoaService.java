@@ -16,6 +16,10 @@ public class PessoaService {
     this.pessoaRepository = pessoaRepository;
   }
 
+  public PessoaModel buscarPeloCodigo(Long codigo) {
+    return pessoaRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
+}
+
   public PessoaModel atualizar(Long codigo, PessoaModel pessoa) {
     PessoaModel pessoaSalva = pessoaRepository.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException(1));
 

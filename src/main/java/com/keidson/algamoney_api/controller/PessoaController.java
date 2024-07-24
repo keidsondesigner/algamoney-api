@@ -53,10 +53,10 @@ public class PessoaController {
 	}
 
 	@GetMapping("/{codigo}")
-	public ResponseEntity<PessoaModel> buscarPeloCodigo(@PathVariable Long codigo) {
-		Optional<PessoaModel> pessoa = pessoaRepository.findById(codigo);
-		return pessoa.isPresent() ? ResponseEntity.ok(pessoa.get()) : ResponseEntity.notFound().build();
-	}
+    public ResponseEntity<PessoaModel> buscarPeloCodigo(@PathVariable Long codigo) {
+        PessoaModel pessoa = pessoaService.buscarPeloCodigo(codigo);
+        return ResponseEntity.ok(pessoa);
+    }
 
 	@DeleteMapping("/{codigo}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
