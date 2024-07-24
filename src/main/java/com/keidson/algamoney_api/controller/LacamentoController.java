@@ -1,11 +1,15 @@
 package com.keidson.algamoney_api.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.keidson.algamoney_api.event.RecursoCriadoEvent;
+import com.keidson.algamoney_api.exceptionHandler.PessoaInexistenteOuInativaException;
+import com.keidson.algamoney_api.exceptionHandler.AlgamoneyExceptionHandler.Erro;
 import com.keidson.algamoney_api.model.LancamentoModel;
 import com.keidson.algamoney_api.repository.LacamentoRepository;
+import com.keidson.algamoney_api.service.LancamentoService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -26,13 +33,19 @@ public class LacamentoController {
 
   private final LacamentoRepository lancamentoRepository;
   private final ApplicationEventPublisher publisher; //Publicador de eventos RecursoCriadoEvent()
+  private final LancamentoService lancamentoService;
+  private final MessageSource messageSource;
 
   public LacamentoController(
     LacamentoRepository lancamentoRepository,
-    ApplicationEventPublisher publisher
+    ApplicationEventPublisher publisher,
+    LancamentoService lancamentoService,
+    MessageSource messageSource
   ) {
     this.lancamentoRepository = lancamentoRepository;
     this.publisher = publisher;
+    this.lancamentoService = lancamentoService;
+    this.messageSource = messageSource;
   }
 
   @GetMapping
@@ -49,11 +62,18 @@ public class LacamentoController {
 
   @PostMapping
   public ResponseEntity<LancamentoModel> criar(@Valid @RequestBody LancamentoModel lancamentoModel, HttpServletResponse response) {
-    LancamentoModel lancamentoSalvo = this.lancamentoRepository.save(lancamentoModel);
+    LancamentoModel lancamentoSalvo = this.lancamentoService.salvar(lancamentoModel);
 
     publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getCodigo()));
-
     return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
+  }
+
+  @ExceptionHandler({ PessoaInexistenteOuInativaException.class })
+  public ResponseEntity<Object> handlePessoaInexistenteOuInativaException(PessoaInexistenteOuInativaException ex) {
+    String mensagemUsuario = messageSource.getMessage("pessoa.inexistente-ou-inativa", null, LocaleContextHolder.getLocale());
+    String mensagemDesenvolvedor = ex.toString();
+    List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor)); 
+    return ResponseEntity.badRequest().body(erros);
   }
 
 }
