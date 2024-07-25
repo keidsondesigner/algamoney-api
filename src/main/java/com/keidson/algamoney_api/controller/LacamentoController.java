@@ -8,6 +8,9 @@ import java.util.Optional;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +59,11 @@ public class LacamentoController {
   @GetMapping
   public List<LancamentoModel> listar() {
     return this.lancamentoRepository.findAll();
+  }
+
+  @GetMapping("/paginados")
+  public Page<LancamentoModel> listarPaginados(@PageableDefault(size = 5) Pageable page) {
+    return this.lancamentoRepository.findAll(page);
   }
 
   @GetMapping("/{codigo}")
