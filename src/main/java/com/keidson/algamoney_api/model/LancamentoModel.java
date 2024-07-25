@@ -40,7 +40,7 @@ public class LancamentoModel {
 
   @NotNull(message = "O campo [tipo], é obrigatório.")
   @Enumerated(EnumType.STRING)
-  private TipoLancamento tipo; // "TipoLancamento" é um enum criado;
+  private TipoLancamentoEnum tipo; // "TipoLancamento" é um enum criado;
 
   @NotNull(message = "O campo [categoria], é obrigatório.")
   @ManyToOne
@@ -100,11 +100,11 @@ public class LancamentoModel {
     this.observacao = observacao;
   }
 
-  public TipoLancamento getTipo() {
+  public TipoLancamentoEnum getTipo() {
     return tipo;
   }
 
-  public void setTipo(TipoLancamento tipo) {
+  public void setTipo(TipoLancamentoEnum tipo) {
     this.tipo = tipo;
   }
 
