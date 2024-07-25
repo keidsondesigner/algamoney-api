@@ -1,5 +1,6 @@
 package com.keidson.algamoney_api.controller;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.keidson.algamoney_api.event.RecursoCriadoEvent;
@@ -58,6 +61,17 @@ public class LacamentoController {
     Optional<LancamentoModel> lancamento = this.lancamentoRepository.findById(codigo);
     return lancamento.isPresent() ? 
       ResponseEntity.ok(lancamento.get()) : ResponseEntity.notFound().build();
+  }
+
+  @GetMapping("/filtrar")
+  public ResponseEntity<List<LancamentoModel>> filtrarLancamentos(
+      @RequestParam(required = false) String descricao,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataVencimentoDe,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataVencimentoAte
+    ) {
+    
+    List<LancamentoModel> lancamentos = lancamentoService.filtrarLancamentos(descricao, dataVencimentoDe, dataVencimentoAte);
+    return ResponseEntity.ok(lancamentos);
   }
 
   @PostMapping

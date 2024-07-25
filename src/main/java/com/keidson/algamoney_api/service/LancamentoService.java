@@ -1,5 +1,8 @@
 package com.keidson.algamoney_api.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.keidson.algamoney_api.exceptionHandler.PessoaInexistenteOuInativaException;
@@ -29,6 +32,10 @@ public class LancamentoService {
     }
 
     return lacamentoRepository.save(lancamento);
+  }
+
+  public List<LancamentoModel> filtrarLancamentos(String descricao, LocalDate dataVencimentoDe, LocalDate dataVencimentoAte) {
+    return lacamentoRepository.findByDescricaoAndDataVencimento(descricao, dataVencimentoDe, dataVencimentoAte);
   }
 
 }
