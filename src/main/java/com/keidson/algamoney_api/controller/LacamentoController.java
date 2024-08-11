@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,16 +58,19 @@ public class LacamentoController {
   }
 
   @GetMapping
+  @PreAuthorize("hasAuthority('ROLE_LANCAMENTO_PESQUISAR')")
   public List<LancamentoModel> listar() {
     return this.lancamentoRepository.findAll();
   }
 
   @GetMapping("/paginados")
+  @PreAuthorize("hasAuthority('ROLE_LANCAMENTO_PESQUISAR')")
   public Page<LancamentoModel> listarPaginados(@PageableDefault(size = 5) Pageable page) {
     return this.lancamentoRepository.findAll(page);
   }
 
   @GetMapping("/{codigo}")
+  @PreAuthorize("hasAuthority('ROLE_LANCAMENTO_PESQUISAR')")
   public ResponseEntity<LancamentoModel> buscarPorCodigo(@PathVariable Long codigo) {
     Optional<LancamentoModel> lancamento = this.lancamentoRepository.findById(codigo);
     return lancamento.isPresent() ? 
@@ -74,6 +78,7 @@ public class LacamentoController {
   }
 
   @GetMapping("/filtrar")
+  @PreAuthorize("hasAuthority('ROLE_LANCAMENTO_PESQUISAR')")
   public ResponseEntity<List<LancamentoModel>> filtrarLancamentos(
       @RequestParam(required = false) String descricao,
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataVencimentoDe,
@@ -85,6 +90,7 @@ public class LacamentoController {
   }
 
   @PostMapping
+  @PreAuthorize("hasAuthority('ROLE_LANCAMENTO_CADASTRAR')")
   public ResponseEntity<LancamentoModel> criar(@Valid @RequestBody LancamentoModel lancamentoModel, HttpServletResponse response) {
     LancamentoModel lancamentoSalvo = this.lancamentoService.salvar(lancamentoModel);
 
@@ -94,6 +100,7 @@ public class LacamentoController {
 
   @DeleteMapping("/{codigo}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
+  @PreAuthorize("hasAuthority('ROLE_LANCAMENTO_REMOVER')")
   public void remover(@PathVariable Long codigo) {
     this.lancamentoService.remove(codigo);
   }
