@@ -36,12 +36,11 @@ public class TokenService {
     try {
       Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
 
-      JWT.require(algorithm)
+      return JWT.require(algorithm)
           .withIssuer("login-auth-api")
           .build()
           .verify(token)
           .getSubject();
-      return token;
     } catch (JWTVerificationException e) {
       return null;
     }
