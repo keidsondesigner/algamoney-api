@@ -14,6 +14,7 @@ import java.util.Optional;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,11 +35,13 @@ public class CategoriaController {
   }
   
   @GetMapping
+  @PreAuthorize("hasAuthority('ROLE_CATEGORIA_PESQUISAR')")
   public List<CategoriaModel> listar() {
     return categoriaRepository.findAll();
   }
 
   @PostMapping
+  @PreAuthorize("hasAuthority('ROLE_CATEGORIA_CADASTRAR')")
   public ResponseEntity<CategoriaModel> criar(@Valid @RequestBody CategoriaModel categoriaModel, HttpServletResponse response) {
     CategoriaModel categoriaSalva = this.categoriaRepository.save(categoriaModel);
 
@@ -48,6 +51,7 @@ public class CategoriaController {
   }
 
   @GetMapping("/{codigo}")
+  @PreAuthorize("hasAuthority('ROLE_CATEGORIA_PESQUISAR')")
   public ResponseEntity<CategoriaModel> buscarPorCodigo(@PathVariable Long codigo) {
     Optional<CategoriaModel> categoriaModelOptional = this.categoriaRepository.findById(codigo);
     return categoriaModelOptional.isPresent() ? 
