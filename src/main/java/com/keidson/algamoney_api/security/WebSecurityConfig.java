@@ -36,6 +36,11 @@ public class WebSecurityConfig {
               .requestMatchers(HttpMethod.DELETE, "/lancamentos/**").hasAuthority("ROLE_LANCAMENTO_REMOVER")
               .requestMatchers(HttpMethod.POST, "/categorias/**").hasAuthority("ROLE_CATEGORIA_CADASTRAR")
               .requestMatchers(HttpMethod.GET, "/categorias/**").hasAuthority("ROLE_CATEGORIA_PESQUISAR")
+              .requestMatchers(HttpMethod.DELETE, "/categorias/**").hasAuthority("ROLE_CATEGORIA_REMOVER")
+              .requestMatchers(HttpMethod.POST, "/pessoas/**").hasAuthority("ROLE_PESSOA_CADASTRAR")
+              .requestMatchers(HttpMethod.GET, "/pessoas/**").hasAuthority("ROLE_PESSOA_PESQUISAR")
+              .requestMatchers(HttpMethod.DELETE, "/pessoas/**").hasAuthority("ROLE_PESSOA_REMOVER")
+              .requestMatchers(HttpMethod.PUT, "/pessoas/**").hasAuthority("ROLE_PESSOA_ATUALIZAR")
 
               .anyRequest().authenticated()
           ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
