@@ -1,7 +1,5 @@
 package com.keidson.algamoney_api.controller;
 
-import java.util.Optional;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
