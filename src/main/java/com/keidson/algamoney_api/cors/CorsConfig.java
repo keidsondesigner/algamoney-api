@@ -10,8 +10,9 @@ public class CorsConfig implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
+        .allowedOrigins("http://localhost:4200", "https://algamoney-api-j1pt.onrender.com") 
         .allowedOrigins("*")
-        .allowedMethods("GET", "POST", "PUT", "DELETE");
+        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
   }
 
 }
