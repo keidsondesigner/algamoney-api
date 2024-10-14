@@ -1,3 +1,5 @@
 package com.keidson.algamoney_api.dto;
 
-public record ResponseDTO(String email, String token) { }
+import java.util.Set;
+
+public record ResponseDTO(String email, String token, Set<String> permissoes) { }
