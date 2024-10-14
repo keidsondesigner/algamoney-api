@@ -28,55 +28,42 @@ public class AuthController {
   private final TokenService tokenService;
 
   public AuthController(
-    TokenService tokenService,
-    PasswordEncoder passwordEncoder,
-    UsuarioRepository usuarioRepository
-  ) {
+      TokenService tokenService,
+      PasswordEncoder passwordEncoder,
+      UsuarioRepository usuarioRepository) {
     this.tokenService = tokenService;
     this.passwordEncoder = passwordEncoder;
     this.usuarioRepository = usuarioRepository;
   }
 
   @PostMapping("/login")
-public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO body) {
+  public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO body) {
     UsuarioModel user = this.usuarioRepository.findByEmail(body.email())
         .orElseThrow(() -> new RuntimeException("Email não encontrado"));
 
     if (this.passwordEncoder.matches(body.senha(), user.getSenha())) {
-        String token = this.tokenService.generateToken(user);
-        
-        // Obter as permissões do usuário
-        Set<Long> permissoes = user.getPermissoes().stream()
-            .map(PermissaoModel::getCodigo)
-            .collect(Collectors.toSet());
-        
-        return ResponseEntity.ok(new ResponseDTO(user.getEmail(), token, permissoes));
+      String token = this.tokenService.generateToken(user);
+      return ResponseEntity.ok(new ResponseDTO(user.getEmail(), token));
     }
 
     return ResponseEntity.badRequest().build();
-}
+  }
 
-@PostMapping("/register")
-public ResponseEntity<ResponseDTO> register(@RequestBody RegisterRequestDTO body) {
+  @PostMapping("/register")
+  public ResponseEntity<ResponseDTO> register(@RequestBody RegisterRequestDTO body) {
     Optional<UsuarioModel> user = this.usuarioRepository.findByEmail(body.email());
 
     if (user.isEmpty()) {
-        UsuarioModel newUser = new UsuarioModel();
-        newUser.setSenha(passwordEncoder.encode(body.senha()));
-        newUser.setEmail(body.email());
-        newUser.setNome(body.nome());
-        this.usuarioRepository.save(newUser);
+      UsuarioModel newUser = new UsuarioModel();
+      newUser.setSenha(passwordEncoder.encode(body.senha()));
+      newUser.setEmail(body.email());
+      newUser.setNome(body.nome());
+      this.usuarioRepository.save(newUser);
 
-        String token = this.tokenService.generateToken(newUser);
-        
-        // Obter as permissões do novo usuário (pode ser um conjunto vazio se não houver permissões)
-        Set<Long> permissoes = newUser.getPermissoes().stream()
-            .map(PermissaoModel::getCodigo)
-            .collect(Collectors.toSet());
-
-        return ResponseEntity.ok(new ResponseDTO(newUser.getEmail(), token, permissoes));
+      String token = this.tokenService.generateToken(newUser);
+      return ResponseEntity.ok(new ResponseDTO(newUser.getEmail(), token));
     }
 
     return ResponseEntity.badRequest().build();
-}
+  }
 }
