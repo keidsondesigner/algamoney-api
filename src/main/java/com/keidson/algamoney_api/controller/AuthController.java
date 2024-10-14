@@ -46,8 +46,8 @@ public ResponseEntity<ResponseDTO> login(@RequestBody LoginRequestDTO body) {
         String token = this.tokenService.generateToken(user);
         
         // Obter as permissões do usuário
-        Set<String> permissoes = user.getPermissoes().stream()
-            .map(PermissaoModel::getDescricao)
+        Set<Long> permissoes = user.getPermissoes().stream()
+            .map(PermissaoModel::getCodigo)
             .collect(Collectors.toSet());
         
         return ResponseEntity.ok(new ResponseDTO(user.getEmail(), token, permissoes));
@@ -70,8 +70,8 @@ public ResponseEntity<ResponseDTO> register(@RequestBody RegisterRequestDTO body
         String token = this.tokenService.generateToken(newUser);
         
         // Obter as permissões do novo usuário (pode ser um conjunto vazio se não houver permissões)
-        Set<String> permissoes = newUser.getPermissoes().stream()
-            .map(PermissaoModel::getDescricao)
+        Set<Long> permissoes = newUser.getPermissoes().stream()
+            .map(PermissaoModel::getCodigo)
             .collect(Collectors.toSet());
 
         return ResponseEntity.ok(new ResponseDTO(newUser.getEmail(), token, permissoes));
