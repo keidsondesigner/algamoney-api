@@ -26,8 +26,8 @@ public class TokenService {
       Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
 
       // Obter as permissões do usuário
-      List<Long> permissoes = usuarioModel.getPermissoes().stream()
-          .map(PermissaoModel::getCodigo)
+      List<String> permissoes = usuarioModel.getPermissoes().stream()
+          .map(PermissaoModel::getDescricao)
           .collect(Collectors.toList());
 
       String token = JWT.create()
