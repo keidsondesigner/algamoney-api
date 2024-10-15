@@ -10,7 +10,7 @@ public class CorsConfig implements WebMvcConfigurer {
   @Override
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
-    .allowedOrigins("http://localhost:4200", "https://algamoney-frontend-beige.vercel.app") // Substitua pelo domínio do seu aplicativo
+    .allowedOrigins("http://localhost:4200", "https://algamoney-frontend-u1ee.vercel.app") // Substitua pelo domínio do seu aplicativo
     .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
     .allowedHeaders("*") // Permite todos os cabeçalhos
     .allowCredentials(true); // Permite credenciais (cookies, etc.)
