@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import java.util.List;
 
 @RestController
 @RequestMapping("/pessoas")
@@ -33,20 +34,27 @@ public class PessoaController {
 	private final PessoaService pessoaService;
 
 	public PessoaController(
-		PessoaRepository pessoaRepository, 
+		PessoaRepository pessoaRepository,
 		ApplicationEventPublisher publisher,
 		PessoaService pessoaService
-		
+
 	) {
     this.pessoaRepository = pessoaRepository;
     this.publisher = publisher;
 		this.pessoaService = pessoaService;
   }
 
+	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESSOA_PESQUISAR')")
+	public ResponseEntity<List<PessoaModel>> listar() {
+		List<PessoaModel> pessoas = pessoaService.listar();
+		return ResponseEntity.ok(pessoas);
+	}
+
   @PostMapping
 	@PreAuthorize("hasAuthority('ROLE_PESSOA_CADASTRAR')")
 	public ResponseEntity<PessoaModel> criar(@Valid @RequestBody PessoaModel pessoa, HttpServletResponse response) {
-		PessoaModel pessoaSalva = pessoaRepository.save(pessoa);		
+		PessoaModel pessoaSalva = pessoaRepository.save(pessoa);
 
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
