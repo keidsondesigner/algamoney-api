@@ -27,13 +27,33 @@ Antes de consumir a API no seu frontend, adicione o path no arquivo [CorsConfig.
      spring.datasource.password=<PASSWORD>
      ```
 
-3. **Compile e rode o projeto:**
+3. **Rodando o Projeto via Docker**
+
+   3.1 **Certifique-se de ter o Docker instalado na sua máquina.**
+
+   3.2 **Construa a imagem Docker:**
+      ```sh
+      docker build -t algamoney-api .
+      ```
+
+   3.3 **Rode o contêiner:**
+      ```sh
+      docker run -p 8080:8080 algamoney-api
+      ```
+
+   Isso irá iniciar o contêiner com a aplicação rodando no Java 17, sem a necessidade de ter o Java instalado na sua máquina local. A aplicação estará disponível em `http://localhost:8080`.
+
+4. **Compile e rode o projeto localmente:**
+   - Dependências:
+   - Java 17
+   - Maven 3.8.1+
+   - PostgreSQL 13+
    ```sh
    ./mvnw clean install
    ./mvnw spring-boot:run
    ```
 
-4. **Acesse a aplicação:**
+5. **Acesse a aplicação:**
    - Após subir o serviodor, a aplicação estará disponível em `http://localhost:8080`.
 
 
