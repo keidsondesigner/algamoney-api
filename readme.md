@@ -3,12 +3,44 @@
 ## Visão Geral
 A API **Algamoney** é um serviço RESTful desenvolvido em **Spring Boot** para gerenciar lançamentos financeiros, categorias, pessoas e autenticação de usuários.
 
+###
+Antes de consumir a API no seu frontend, adicione o path no arquivo [CorsConfig.java no método allowedOrigins()](src/main/java/com/keidson/algamoney_api/cors/CorsConfig.java)
+
+## Dependências
+- Java 17
+- Maven 3.8.1+
+- PostgreSQL 13+
+
+## Como Rodar o Projeto
+
+1. **Clone o repositório:**
+   ```sh
+   git clone <https://github.com/keidsondesigner/algamoney-api.git>
+   cd algamoney-api
+   ```
+
+2. **Configure o banco de dados:**
+   - Atualize as configurações do banco de dados PostgreSQL em `src/main/resources/application.properties`:
+     ```properties
+     spring.datasource.url=jdbc:postgresql://<HOST>:<PORT>/<DATABASE>
+     spring.datasource.username=<USERNAME>
+     spring.datasource.password=<PASSWORD>
+     ```
+
+3. **Compile e rode o projeto:**
+   ```sh
+   ./mvnw clean install
+   ./mvnw spring-boot:run
+   ```
+
+4. **Acesse a aplicação:**
+   - Após subir o serviodor, a aplicação estará disponível em `http://localhost:8080`.
+
+
 ## Autenticação
+
 A API utiliza autenticação via **JWT**. Para acessar os endpoints protegidos, é necessário incluir um token **Bearer** no cabeçalho das requisições.
 
-
-###
-Antes de consumir a API no seu frontend, adicione o patch no arquivo [CorsConfig em allowedOrigins](src/main/java/com/keidson/algamoney_api/cors/CorsConfig.java)
 
 ### 1. Registrar Usuário
 **Endpoint:** `POST /auth/register`
