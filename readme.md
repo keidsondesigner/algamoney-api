@@ -1,5 +1,7 @@
 # API Algamoney
 
+<img src="https://i.imgur.com/aTaviZA.png" title="source: imgur.com" />
+
 ## Visão Geral
 A API **Algamoney** é um serviço RESTful desenvolvido em **Spring Boot** para gerenciar lançamentos financeiros, categorias, pessoas e autenticação de usuários.
 
