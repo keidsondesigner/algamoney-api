@@ -63,6 +63,14 @@ Antes de consumir a API no seu frontend, adicione o path no arquivo [CorsConfig.
 
 A API utiliza autenticação via **JWT**. Para acessar os endpoints protegidos, é necessário incluir um token **Bearer** no cabeçalho das requisições.
 
+**Login com User Admin:**
+```json
+{
+  "email": "admin@algamoney.com",
+  "senha": "admin"
+}
+```
+
 
 ### 1. Registrar Usuário
 **Endpoint:** `POST /auth/register`
