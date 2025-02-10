@@ -22,11 +22,11 @@ Antes de consumir a API no seu frontend, adicione o path no arquivo [CorsConfig.
    ```
 
 2. **Configure o banco de dados:**
-   - Atualize as configurações do banco de dados PostgreSQL em `src/main/resources/application.properties`:
+   - Atualize as configurações do banco de dados PostgreSQL em `.env`:
      ```properties
-     spring.datasource.url=jdbc:postgresql://<HOST>:<PORT>/<DATABASE>
-     spring.datasource.username=<USERNAME>
-     spring.datasource.password=<PASSWORD>
+     SPRING_DATASOURCE_URL=jdbc:postgresql://<HOST>:<PORT>/<DATABASE>
+     SPRING_DATASOURCE_USERNAME=<USERNAME>
+     SPRING_DATASOURCE_PASSWORD=<PASSWORD>
      ```
 
 3. **Rodando o Projeto via Docker**
