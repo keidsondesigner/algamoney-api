@@ -2,6 +2,71 @@
 
 <img src="https://i.imgur.com/aTaviZA.png" title="source: imgur.com" />
 
+
+## Diagrama de Classes (Domínio da API)
+
+```mermaid
+classDiagram
+  class CategoriaModel {
+    -Long codigo
+    -String nome
+  }
+
+  class LancamentoModel {
+    -Long codigo
+    -String descricao
+    -LocalDate dataVencimento
+    -LocalDate dataPagamento
+    -BigDecimal valor
+    -String observacao
+    -TipoLancamentoEnum tipo
+    -CategoriaModel categoria
+    -PessoaModel pessoa
+  }
+
+  class PessoaModel {
+    -Long codigo
+    -String nome
+    -Boolean ativo
+    -EnderecoModel endereco
+  }
+
+  class EnderecoModel {
+    -String logradouro
+    -String numero
+    -String complemento
+    -String bairro
+    -String cep
+    -String cidade
+    -String estado
+  }
+
+  class UsuarioModel {
+    -Long codigo
+    -String nome
+    -String email
+    -String senha
+    -Set<PermissaoModel> permissoes
+  }
+
+  class PermissaoModel {
+    -Long codigo
+    -String descricao
+  }
+
+  class TipoLancamentoEnum {
+    <<enumeration>>
+    RECEITA
+    DESPESA
+  }
+
+  LancamentoModel "N" --> "1" CategoriaModel
+  LancamentoModel "N" --> "1" PessoaModel
+  PessoaModel "1" *-- "1" EnderecoModel
+  UsuarioModel "N" *-- "N" PermissaoModel
+  LancamentoModel --> TipoLancamentoEnum
+```
+
 ## Visão Geral
 A API **Algamoney** é um serviço RESTful desenvolvido em **Spring Boot** para gerenciar lançamentos financeiros, categorias, pessoas e autenticação de usuários.
 
@@ -101,8 +166,6 @@ A API utiliza autenticação via **JWT**. Para acessar os endpoints protegidos, 
   "token": "eyJhbGciOiJIUzI1NiIs..."
 }
 ```
-
----
 
 ## Categorias
 
@@ -249,4 +312,3 @@ A API utiliza autenticação via **JWT**. Para acessar os endpoints protegidos, 
 
 **Headers:**
 - Authorization: Bearer {token}
-
