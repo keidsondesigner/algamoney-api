@@ -87,7 +87,7 @@ Antes de consumir a API no seu frontend, adicione o path no arquivo [CorsConfig.
    ```
 
 2. **Configure o banco de dados:**
-   - Atualize as configurações do banco de dados PostgreSQL em `.env`:
+   - Atualize as configurações do banco de dados PostgreSQL em [application.properties](src\main\resources\application.properties)
      ```properties
      SPRING_DATASOURCE_URL=jdbc:postgresql://<HOST>:<PORT>/<DATABASE>
      SPRING_DATASOURCE_USERNAME=<USERNAME>
