@@ -2,6 +2,13 @@
 
 <img src="https://i.imgur.com/aTaviZA.png" title="source: imgur.com" />
 
+<img src="https://i.imgur.com/2GFpt6N.png" title="source: imgur.com" />
+
+<img src="https://i.imgur.com/OmoApDs.png" title="source: imgur.com" />
+
+<img src="https://i.imgur.com/9rTrKXK.png" title="source: imgur.com" />
+
+<img src="https://i.imgur.com/CwztDm8.png" title="source: imgur.com" />
 
 ## Diagrama de Classes (Domínio da API)
 
